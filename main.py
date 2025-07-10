@@ -1,7 +1,7 @@
 import os
 import sys
 import re
-__version__="0.1.0"
+__version__="0.1.1"
 
 # --- ANSI Color Codes ---
 COLOR_RESET = "\033[0m"
@@ -24,6 +24,17 @@ def is_valid_version(version):
 def is_valid_github_url(url):
     """Basic validation for GitHub repository URL format."""
     return re.match(r"^https://github\.com/[a-zA-Z0-9_-]+/[a-zA-Z0-9_.-]+/?$", url)
+
+def is_valid_python_entrypoint_reference(ref):
+    """
+    Validates if a string is a valid Python entry point reference.
+    Format: importable.module:object.attr
+    """
+    # Requires at least one colon. Parts can contain alphanumeric, underscore, dot.
+    # Starts with a letter or underscore, followed by alphanumeric, underscore, dot.
+    # Colon separates module path from object/function name.
+    return re.match(r"^[a-zA-Z_][a-zA-Z0-9_.]*:[a-zA-Z_][a-zA-Z0-9_.]*$", ref)
+
 
 def get_input_with_env_default(prompt_text, env_var_name, description, clarification_text=None, mandatory=False, validator=None):
     """
@@ -75,7 +86,7 @@ def get_mandatory_input(prompt_text, clarification_text=None, validator=None):
         value = input(f"{COLOR_YELLOW}> {COLOR_RESET}").strip() # User input line
         if not value:
             print(f"{COLOR_RED}This field cannot be empty. Please provide a value.{COLOR_RESET}")
-        elif value and validator and not validator(value):
+        elif validator and not validator(value):
             print(f"{COLOR_RED}Invalid format. Please check the required format and try again.{COLOR_RESET}")
         else:
             return value
@@ -120,7 +131,7 @@ readme = "README.md"
 # Optional: If your package is a command-line tool, define entry points.
 # This makes your script executable directly from the command line after installation.
 # [project.scripts]
-# Example: tts-cli = "your_package_name.main:run_cli"
+# Example: your-cli-command = "your_package_name.main:run_cli"
 # Adjust 'your_package_name.main' to match your actual package structure and entry point.
 """
     if cli_command_name and cli_entry_point:
@@ -288,7 +299,6 @@ jobs:
 
 def run():
     try:
-
         while True: # Loop for restart option
             print(f"{COLOR_GREEN}--- Python Package & GitHub Pages PyPI Publisher Setup ---{COLOR_RESET}")
             print("This script will generate 'pyproject.toml' and '.github/workflows/publish_to_pypi_pages.yml'.")
@@ -332,12 +342,19 @@ def run():
                     print(f"{COLOR_RED}Invalid input. Please enter 'y' or 'n'.{COLOR_RESET}")
 
             if has_cli:
-                cli_command_name = get_mandatory_input("   What is the command name?", clarification_text="   (e.g., 'tts-cli')")
-                cli_entry_point = get_mandatory_input("   What is the Python path to the entry function?", clarification_text="   (e.g., 'your_package_name.main:run_cli')")
+                cli_command_name = get_mandatory_input(
+                    "   What is the command name?", 
+                    clarification_text="   (e.g., 'your-cli-command')"
+                )
+                cli_entry_point = get_mandatory_input(
+                    "   What is the Python path to the entry function?", 
+                    clarification_text="   (e.g., 'your_package_name.main:run_cli' - remember the colon ':'!)", # Emphasize colon
+                    validator=is_valid_python_entrypoint_reference # New validation
+                )
 
             package_github_url = get_mandatory_input(
                 "7. What is the full GitHub URL for *this* Python package's repository?",
-                clarification_text="(e.g., 'https://github.com/your-username/tts-cli')",
+                clarification_text="(e.g., 'https://github.com/your-username/your-package-repo')",
                 validator=is_valid_github_url
             )
             print("-" * 60)
