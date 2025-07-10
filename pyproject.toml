@@ -39,7 +39,7 @@ readme = "README.md"
 # Adjust 'your_package_name.main' to match your actual package structure and entry point.
 
 [project.scripts]
-py-toml-builder ="py-toml-builder.main:run"
+py-toml-builder ="py_toml_builder.main:run"
 
 [project.urls]
 "Homepage" = "https://github.com/tugapse/py-toml-builder.git"
