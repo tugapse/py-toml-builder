@@ -1,7 +1,6 @@
 import os
 import sys
 import re
-__version__="0.1.1"
 
 # --- ANSI Color Codes ---
 COLOR_RESET = "\033[0m"
@@ -189,7 +188,7 @@ jobs:
         with:
           repository: {github_username}/{pypi_index_repo_name}
           path: my-python-index-repo # Local path to clone the index repo
-          token: ${{ secrets.{pat_secret_name} }} # Use the PAT secret
+          token: ${{{{ secrets.{pat_secret_name} }}}}
 
       - name: Copy dists and Update PyPI Index HTML Files
         run: |
@@ -292,13 +291,14 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git config user.name "github-actions[bot]"
           git add .
-          git commit -m "Auto-update PyPI index for ${{ github.event.repository.name }} v${{ github.event.release.tag_name || 'latest' }} [skip ci]" || echo "No changes to commit" # '|| echo' prevents failure if no changes
+          git commit -m "Auto-update PyPI index for ${{{{ github.event.repository.name }}}} v${{{{ github.event.release.tag_name || 'latest' }}}} [skip ci]" || echo "No changes to commit" # '|| echo' prevents failure if no changes
           git push
 """
     return workflow_content.strip()
 
-def run():
+def main():
     try:
+
         while True: # Loop for restart option
             print(f"{COLOR_GREEN}--- Python Package & GitHub Pages PyPI Publisher Setup ---{COLOR_RESET}")
             print("This script will generate 'pyproject.toml' and '.github/workflows/publish_to_pypi_pages.yml'.")
@@ -407,10 +407,14 @@ def run():
             print(f"  PAT Secret Name:      {pat_secret_name}")
             print("-" * 60)
 
-            confirm = input(f"{COLOR_YELLOW}Does this look correct? (y/n) [y=continue, n=restart]: {COLOR_RESET}").strip().lower()
-            if confirm in ('y', ''):
+            # Apply the two-line treatment to the final confirmation question
+            confirm_prompt = "Does this look correct?"
+            confirm_clarification = "(y/n) [y=continue, n=restart]"
+            confirm_input = input(f"{COLOR_YELLOW}{confirm_prompt}\n{COLOR_BLUE}{confirm_clarification}{COLOR_YELLOW}\n> {COLOR_RESET}").strip().lower()
+
+            if confirm_input in ('y', ''):
                 break # Exit the loop and proceed
-            elif confirm == 'n':
+            elif confirm_input == 'n':
                 print(f"{COLOR_YELLOW}\nRestarting input process...{COLOR_RESET}\n")
                 continue # Loop again
             else:

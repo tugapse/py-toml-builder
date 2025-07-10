@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "py-toml-builder"
-version = "0.1.1"
+version = "0.1.4"
 authors = [
   { name="Fabio Almeida", email="tugapse@gmail.com" },
 ]
@@ -35,12 +35,12 @@ readme = "README.md"
 # Optional: If your package is a command-line tool, define entry points.
 # This makes your script executable directly from the command line after installation.
 # [project.scripts]
-# Example: tts-cli = "your_package_name.main:run_cli"
+# Example: your-cli-command = "your_package_name.main:run_cli"
 # Adjust 'your_package_name.main' to match your actual package structure and entry point.
 
 [project.scripts]
-py-toml-builder ="py_toml_builder.main:run"
+py-toml-builder = "py_toml_builder.main:run"
 
 [project.urls]
-"Homepage" = "https://github.com/tugapse/py-toml-builder.git"
-"Bug Tracker" = "https://github.com/tugapse/py-toml-builder.git/issues"
+"Homepage" = "https://github.com/tugapse/py-toml-builder"
+"Bug Tracker" = "https://github.com/tugapse/py-toml-builder/issues"

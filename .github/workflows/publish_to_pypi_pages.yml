@@ -37,7 +37,7 @@ jobs:
         with:
           repository: tugapse/python-index
           path: my-python-index-repo # Local path to clone the index repo
-          token: ${{ secrets.GH_PAT_INDEX_REPO }} # Use the PAT secret
+          token: ${{ secrets.GH_PAT_INDEX_REPO }}
 
       - name: Copy dists and Update PyPI Index HTML Files
         run: |
