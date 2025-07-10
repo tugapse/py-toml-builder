@@ -140,5 +140,5 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git config user.name "github-actions[bot]"
           git add .
-          git commit -m "Auto-update PyPI index for ${ github.event.repository.name } v${ github.event.release.tag_name || 'latest' } [skip ci]" || echo "No changes to commit" # '|| echo' prevents failure if no changes
+          git commit -m "Auto-update PyPI index for ${{ github.event.repository.name }} v${{ github.event.release.tag_name || 'latest' }} [skip ci]" || echo "No changes to commit" # '|| echo' prevents failure if no changes
           git push
