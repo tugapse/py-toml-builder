@@ -285,7 +285,7 @@ jobs:
 """
     return workflow_content.strip()
 
-def main():
+def run():
     try:
 
         while True: # Loop for restart option
@@ -460,4 +460,4 @@ def main():
         print(f"{COLOR_RED}Setup failed. Please check permissions or try again.{COLOR_RESET}", file=sys.stderr)
 
 if __name__ == "__main__":
-    main()
+    run()
