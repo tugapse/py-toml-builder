@@ -1,6 +1,7 @@
 import os
 import sys
 import re
+__version__="0.1.0"
 
 # --- ANSI Color Codes ---
 COLOR_RESET = "\033[0m"
