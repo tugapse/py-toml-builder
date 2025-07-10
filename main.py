@@ -296,7 +296,7 @@ jobs:
 """
     return workflow_content.strip()
 
-def main():
+def run():
     try:
 
         while True: # Loop for restart option
